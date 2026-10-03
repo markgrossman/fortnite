@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squad Stats</title>
+<style>
+  :root { --bg:#0f1220; --card:#181c30; --text:#e8eaf6; --muted:#8b91b3; --accent:#7c5cff; --line:#262b47; }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f5f6fb; --card:#fff; --text:#171a2e; --muted:#6a6f8c; --accent:#5b3df5; --line:#e3e5f0; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 system-ui,sans-serif; }
+  main { max-width:900px; margin:0 auto; padding:24px 16px 48px; }
+  h1 { margin:0 0 4px; font-size:1.6rem; }
+  .sub { color:var(--muted); margin-bottom:20px; font-size:.85rem; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+  .group { display:inline-flex; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .group button { background:none; border:0; color:var(--muted); padding:7px 14px; cursor:pointer; font:inherit; }
+  .group button.on { background:var(--accent); color:#fff; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; min-width:560px; }
+  th, td { padding:10px 14px; text-align:right; white-space:nowrap; }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:500; font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; cursor:pointer; user-select:none; border-bottom:1px solid var(--line); }
+  th.sorted { color:var(--text); }
+  th.sorted::after { content:" ▾"; }
+  tr + tr td { border-top:1px solid var(--line); }
+  td.name { font-weight:600; }
+  .rank { color:var(--muted); margin-right:8px; display:inline-block; width:1.2em; }
+  .err { color:#ff6b6b; font-size:.75rem; font-weight:400; margin-left:8px; }
+  .empty { padding:32px; text-align:center; color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Squad Stats</h1>
+  <div class="sub" id="updated">Loading…</div>
+  <div class="controls">
+    <div class="group" id="window"></div>
+    <div class="group" id="mode"></div>
+  </div>
+  <div class="card"><table id="table"></table></div>
+</main>
+<script>
+const WINDOWS = { week: 'This week', season: 'Season', lifetime: 'Lifetime' };
+const MODES = { overall: 'Overall', solo: 'Solo', duo: 'Duo', squad: 'Squad' };
+// Weekly deltas come from history snapshots, which only track overall stats.
+const COLS = [
+  ['wins', 'Wins', (v) => v],
+  ['kills', 'Kills', (v) => v],
+  ['matches', 'Matches', (v) => v],
+  ['kd', 'K/D', (v) => v.toFixed(2)],
+  ['winRate', 'Win %', (v) => v.toFixed(1) + '%'],
+  ['hours', 'Hours', (v) => v.toFixed(1)],
+];
+
+const state = { window: 'season', mode: 'overall', sort: 'wins', data: null, history: {} };
+
+function weekStats(name) {
+  const snaps = state.history[name] ?? [];
+  if (!snaps.length) return null;
+  const cutoff = Date.now() - 7 * 864e5;
+  // Baseline = latest snapshot at or before the cutoff, else the earliest we have.
+  const base = [...snaps].reverse().find((s) => Date.parse(s.t) <= cutoff) ?? snaps[0];
+  const cur = snaps.at(-1);
+  const d = (k) => cur[k] - base[k];
+  const matches = d('matches');
+  return {
+    wins: d('wins'), kills: d('kills'), matches,
+    kd: d('deaths') > 0 ? d('kills') / d('deaths') : d('kills'),
+    winRate: matches ? (d('wins') / matches) * 100 : 0,
+    minutesPlayed: d('minutesPlayed'),
+  };
+}
+
+function rowStats(p) {
+  const m = state.window === 'week'
+    ? weekStats(p.name)
+    : p[state.window]?.[state.mode];
+  if (!m) return null;
+  return { ...m, hours: m.minutesPlayed / 60 };
+}
+
+function render() {
+  for (const [id, opts, key] of [['window', WINDOWS, 'window'], ['mode', MODES, 'mode']]) {
+    const el = document.getElementById(id);
+    el.innerHTML = Object.entries(opts).map(([k, label]) =>
+      `<button data-k="${k}" class="${state[key] === k ? 'on' : ''}"
+        ${key === 'mode' && state.window === 'week' && k !== 'overall' ? 'disabled style="opacity:.4;cursor:default"' : ''}>${label}</button>`).join('');
+    el.onclick = (e) => {
+      const k = e.target.dataset?.k;
+      if (!k || e.target.disabled) return;
+      state[key] = k;
+      if (state.window === 'week') state.mode = 'overall';
+      render();
+    };
+  }
+
+  const rows = state.data.players
+    .map((p) => ({ p, s: rowStats(p) }))
+    .sort((a, b) => (b.s?.[state.sort] ?? -1) - (a.s?.[state.sort] ?? -1));
+
+  const table = document.getElementById('table');
+  if (!rows.length) { table.innerHTML = '<tr><td class="empty">No players yet. Add some to players.json.</td></tr>'; return; }
+
+  table.innerHTML = `<thead><tr><th>Player</th>${COLS.map(([k, label]) =>
+    `<th data-k="${k}" class="${state.sort === k ? 'sorted' : ''}">${label}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(({ p, s }, i) => `<tr>
+      <td class="name"><span class="rank">${i + 1}</span>${esc(p.name)}${p.error ? `<span class="err" title="${esc(p.error)}">stale</span>` : ''}</td>
+      ${COLS.map(([k, , fmt]) => `<td>${s ? fmt(s[k]) : '–'}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  table.querySelector('thead').onclick = (e) => {
+    if (e.target.dataset.k) { state.sort = e.target.dataset.k; render(); }
+  };
+}
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+Promise.all([
+  fetch('data/stats.json').then((r) => r.json()),
+  fetch('data/history.json').then((r) => r.json()).catch(() => ({})),
+]).then(([data, history]) => {
+  state.data = data;
+  state.history = history;
+  document.getElementById('updated').textContent = data.updatedAt
+    ? 'Last change: ' + new Date(data.updatedAt).toLocaleString()
+    : 'Waiting for the first update run.';
+  render();
+}).catch(() => { document.getElementById('updated').textContent = 'Could not load stats.'; });
+</script>
+</body>
+</html>
