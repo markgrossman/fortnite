@@ -23,6 +23,14 @@
    "kills": 3467,
    "deaths": 747,
    "minutesPlayed": 11742
+  },
+  {
+   "t": "2026-10-04T06:04:43.208Z",
+   "matches": 1032,
+   "wins": 283,
+   "kills": 3467,
+   "deaths": 749,
+   "minutesPlayed": 11761
   }
  ],
  "Kaiser2007": [
@@ -57,6 +65,14 @@
    "kills": 29212,
    "deaths": 13519,
    "minutesPlayed": 131122
+  },
+  {
+   "t": "2026-10-04T06:04:47.769Z",
+   "matches": 15061,
+   "wins": 1540,
+   "kills": 29214,
+   "deaths": 13521,
+   "minutesPlayed": 131141
   }
  ],
  "Chopstix_02": [
@@ -91,6 +107,14 @@
    "kills": 32174,
    "deaths": 14481,
    "minutesPlayed": 163813
+  },
+  {
+   "t": "2026-10-04T06:04:45.560Z",
+   "matches": 16003,
+   "wins": 1520,
+   "kills": 32179,
+   "deaths": 14483,
+   "minutesPlayed": 163832
   }
  ]
 }
