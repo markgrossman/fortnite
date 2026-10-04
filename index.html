@@ -2,34 +2,69 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Squad Stats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#0f1220; --card:#181c30; --text:#e8eaf6; --muted:#8b91b3; --accent:#7c5cff; --line:#262b47; }
-  @media (prefers-color-scheme: light) {
-    :root { --bg:#f5f6fb; --card:#fff; --text:#171a2e; --muted:#6a6f8c; --accent:#5b3df5; --line:#e3e5f0; }
+  :root {
+    --bg:#b8cfc3; --ink:#161616; --white:#fff;
+    --coral:#f6806a; --yellow:#f7c948; --purple:#7470f4;
+    --display:'Barlow Condensed','Arial Narrow',Impact,sans-serif;
   }
   * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 system-ui,sans-serif; }
-  main { max-width:900px; margin:0 auto; padding:24px 16px 48px; }
-  h1 { margin:0 0 4px; font-size:1.6rem; }
-  .sub { color:var(--muted); margin-bottom:20px; font-size:.85rem; }
-  .controls { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
-  .group { display:inline-flex; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
-  .group button { background:none; border:0; color:var(--muted); padding:7px 14px; cursor:pointer; font:inherit; }
-  .group button.on { background:var(--accent); color:#fff; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow-x:auto; }
-  table { width:100%; border-collapse:collapse; min-width:560px; }
-  th, td { padding:10px 14px; text-align:right; white-space:nowrap; }
-  th:first-child, td:first-child { text-align:left; }
-  th { color:var(--muted); font-weight:500; font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; cursor:pointer; user-select:none; border-bottom:1px solid var(--line); }
-  th.sorted { color:var(--text); }
-  th.sorted::after { content:" ▾"; }
-  tr + tr td { border-top:1px solid var(--line); }
-  td.name { font-weight:600; }
-  .rank { color:var(--muted); margin-right:8px; display:inline-block; width:1.2em; }
-  .err { color:#ff6b6b; font-size:.75rem; font-weight:400; margin-left:8px; }
-  .empty { padding:32px; text-align:center; color:var(--muted); }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.4 system-ui,sans-serif; -webkit-text-size-adjust:100%; }
+  main { max-width:680px; margin:0 auto; padding:28px max(16px, env(safe-area-inset-right)) 56px max(16px, env(safe-area-inset-left)); }
+  h1 { margin:0; font:800 3.4rem/.9 var(--display); text-transform:uppercase; letter-spacing:-.01em; }
+  .sub { display:inline-block; margin:12px 0 22px; padding:3px 12px; background:var(--white); border-radius:999px; font-size:.78rem; font-weight:600; }
+
+  .controls { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+  .seg { display:flex; background:var(--white); border-radius:999px; padding:4px; gap:4px; }
+  .seg button { flex:1; background:none; border:0; border-radius:999px; color:var(--ink); min-height:42px; padding:0 10px; font:700 1rem var(--display); text-transform:uppercase; letter-spacing:.03em; cursor:pointer; }
+  .seg button.on { background:var(--ink); color:var(--white); }
+  .sortrow { display:flex; align-items:center; gap:8px; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:0 16px; }
+  .sortrow::-webkit-scrollbar { display:none; }
+  .sortrow span { flex:none; font:700 .95rem var(--display); text-transform:uppercase; letter-spacing:.05em; }
+  .chip { flex:none; background:var(--white); color:var(--ink); border:0; border-radius:999px; min-height:38px; padding:0 16px; font:700 1rem var(--display); text-transform:uppercase; letter-spacing:.03em; cursor:pointer; }
+  .chip.on { background:var(--ink); color:var(--white); }
+
+  .list { display:flex; flex-direction:column; gap:12px; }
+  .player { --bg-c:var(--ink); --fg:var(--white); --tile:rgba(255,255,255,.1); --track:rgba(255,255,255,.18); --fill:var(--yellow); --badge:rgba(255,255,255,.14);
+            background:var(--bg-c); color:var(--fg); border-radius:28px; padding:18px; }
+  .player.r1 { --bg-c:var(--coral); --fg:var(--ink); --tile:rgba(255,255,255,.35); --track:rgba(0,0,0,.14); --fill:var(--ink); --badge:rgba(255,255,255,.4); }
+  .player.r2 { --bg-c:var(--yellow); --fg:var(--ink); --tile:rgba(255,255,255,.4); --track:rgba(0,0,0,.14); --fill:var(--ink); --badge:rgba(255,255,255,.45); }
+  .player.r3 { --bg-c:var(--purple); --fg:var(--white); --tile:rgba(255,255,255,.18); --track:rgba(255,255,255,.25); --fill:var(--white); --badge:rgba(255,255,255,.2); }
+  .head { display:flex; align-items:center; gap:10px; }
+  .rank { flex:none; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; font:800 1.4rem var(--display); background:var(--fg); color:var(--bg-c); }
+  .who { flex:1; min-width:0; }
+  .name { font:800 1.4rem/1 var(--display); text-transform:uppercase; overflow-wrap:anywhere; }
+  .meta { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .badge { background:var(--badge); border-radius:999px; padding:1px 10px; font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+  .badge.err { background:var(--ink); color:var(--white); }
+  .hero { flex:none; text-align:right; }
+  .hero b { display:block; font:800 2.4rem/.85 var(--display); font-variant-numeric:tabular-nums; }
+  .hero small { font:700 .85rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .bar { height:8px; background:var(--track); border-radius:4px; margin:16px 0; overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--fill); border-radius:4px; }
+  .tiles { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
+  .tile { background:var(--tile); border-radius:16px; padding:10px 4px 8px; text-align:center; }
+  .tile b { display:block; font:800 1.55rem/1.05 var(--display); font-variant-numeric:tabular-nums; }
+  .tile small { font:700 .8rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .empty { padding:32px; text-align:center; font-weight:600; }
+
+  @media (min-width:560px) {
+    h1 { font-size:4.6rem; }
+    .controls { flex-direction:row; flex-wrap:wrap; }
+    .controls .seg { flex:1 1 auto; }
+    .sortrow { flex:1 0 100%; margin:0; padding:0; }
+    .tiles { grid-template-columns:repeat(6, 1fr); }
+    .player { padding:22px; }
+    .head { gap:12px; }
+    .rank { width:42px; height:42px; }
+    .name { font-size:1.7rem; }
+    .hero b { font-size:4rem; }
+  }
 </style>
 </head>
 <body>
@@ -37,93 +72,91 @@
   <h1>Squad Stats</h1>
   <div class="sub" id="updated">Loading…</div>
   <div class="controls">
-    <div class="group" id="window"></div>
-    <div class="group" id="mode"></div>
+    <div class="seg" id="window"></div>
+    <div class="seg" id="mode"></div>
+    <div class="sortrow" id="sort"></div>
   </div>
-  <div class="card"><table id="table"></table></div>
+  <div class="list" id="list"></div>
 </main>
 <script>
-const WINDOWS = { week: 'This week', season: 'Season', lifetime: 'Lifetime' };
+const WINDOWS = { season: 'Season', lifetime: 'Lifetime' };
 const MODES = { overall: 'Overall', solo: 'Solo', duo: 'Duo', squad: 'Squad' };
-// Weekly deltas come from history snapshots, which only track overall stats.
 const COLS = [
   ['wins', 'Wins', (v) => v],
   ['kills', 'Kills', (v) => v],
-  ['matches', 'Matches', (v) => v],
   ['kd', 'K/D', (v) => v.toFixed(2)],
   ['winRate', 'Win %', (v) => v.toFixed(1) + '%'],
+  ['matches', 'Matches', (v) => v],
   ['hours', 'Hours', (v) => v.toFixed(1)],
+  ['level', 'Level', (v) => v ?? '–'],
 ];
 
-const state = { window: 'season', mode: 'overall', sort: 'wins', data: null, history: {} };
+const state = { window: 'season', mode: 'overall', sort: 'wins', data: null };
 
-function weekStats(name) {
-  const snaps = state.history[name] ?? [];
-  if (!snaps.length) return null;
-  const cutoff = Date.now() - 7 * 864e5;
-  // Baseline = latest snapshot at or before the cutoff, else the earliest we have.
-  const base = [...snaps].reverse().find((s) => Date.parse(s.t) <= cutoff) ?? snaps[0];
-  const cur = snaps.at(-1);
-  const d = (k) => cur[k] - base[k];
-  const matches = d('matches');
-  return {
-    wins: d('wins'), kills: d('kills'), matches,
-    kd: d('deaths') > 0 ? d('kills') / d('deaths') : d('kills'),
-    winRate: matches ? (d('wins') / matches) * 100 : 0,
-    minutesPlayed: d('minutesPlayed'),
+function rowStats(p) {
+  const m = p[state.window]?.[state.mode];
+  if (!m) return null;
+  return { ...m, hours: m.minutesPlayed / 60, level: p.level };
+}
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const PLATFORM = { epic: 'Epic', psn: 'PlayStation', xbl: 'Xbox' };
+
+function segment(id, opts, key) {
+  const el = document.getElementById(id);
+  el.innerHTML = Object.entries(opts).map(([k, label]) =>
+    `<button data-k="${k}" class="${state[key] === k ? 'on' : ''}" >${label}</button>`).join('');
+  el.onclick = (e) => {
+    const k = e.target.dataset?.k;
+    if (!k) return;
+    state[key] = k;
+    render();
   };
 }
 
-function rowStats(p) {
-  const m = state.window === 'week'
-    ? weekStats(p.name)
-    : p[state.window]?.[state.mode];
-  if (!m) return null;
-  return { ...m, hours: m.minutesPlayed / 60 };
-}
-
 function render() {
-  for (const [id, opts, key] of [['window', WINDOWS, 'window'], ['mode', MODES, 'mode']]) {
-    const el = document.getElementById(id);
-    el.innerHTML = Object.entries(opts).map(([k, label]) =>
-      `<button data-k="${k}" class="${state[key] === k ? 'on' : ''}"
-        ${key === 'mode' && state.window === 'week' && k !== 'overall' ? 'disabled style="opacity:.4;cursor:default"' : ''}>${label}</button>`).join('');
-    el.onclick = (e) => {
-      const k = e.target.dataset?.k;
-      if (!k || e.target.disabled) return;
-      state[key] = k;
-      if (state.window === 'week') state.mode = 'overall';
-      render();
-    };
-  }
+  segment('window', WINDOWS, 'window');
+  segment('mode', MODES, 'mode');
+
+  const sort = document.getElementById('sort');
+  sort.innerHTML = '<span>Rank by</span>' + COLS.map(([k, label]) =>
+    `<button class="chip ${state.sort === k ? 'on' : ''}" data-k="${k}">${label}</button>`).join('');
+  sort.onclick = (e) => { if (e.target.dataset?.k) { state.sort = e.target.dataset.k; render(); } };
 
   const rows = state.data.players
     .map((p) => ({ p, s: rowStats(p) }))
     .sort((a, b) => (b.s?.[state.sort] ?? -1) - (a.s?.[state.sort] ?? -1));
 
-  const table = document.getElementById('table');
-  if (!rows.length) { table.innerHTML = '<tr><td class="empty">No players yet. Add some to players.json.</td></tr>'; return; }
+  const list = document.getElementById('list');
+  if (!rows.length) { list.innerHTML = '<div class="empty">No players yet. Add some to players.json.</div>'; return; }
 
-  table.innerHTML = `<thead><tr><th>Player</th>${COLS.map(([k, label]) =>
-    `<th data-k="${k}" class="${state.sort === k ? 'sorted' : ''}">${label}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(({ p, s }, i) => `<tr>
-      <td class="name"><span class="rank">${i + 1}</span>${esc(p.name)}${p.error ? `<span class="err" title="${esc(p.error)}">stale</span>` : ''}</td>
-      ${COLS.map(([k, , fmt]) => `<td>${s ? fmt(s[k]) : '–'}</td>`).join('')}</tr>`).join('')}</tbody>`;
-  table.querySelector('thead').onclick = (e) => {
-    if (e.target.dataset.k) { state.sort = e.target.dataset.k; render(); }
-  };
+  const [, sortLabel, sortFmt] = COLS.find(([k]) => k === state.sort);
+  const max = Math.max(...rows.map(({ s }) => s?.[state.sort] ?? 0), 0);
+  const tiles = COLS.filter(([k]) => k !== state.sort);
+
+  list.innerHTML = rows.map(({ p, s }, i) => `
+    <article class="player r${Math.min(i + 1, 4)}">
+      <div class="head">
+        <div class="rank">${i + 1}</div>
+        <div class="who">
+          <div class="name">${esc(p.name)}</div>
+          <div class="meta">
+            <span class="badge">${PLATFORM[p.accountType] ?? esc(p.accountType)}</span>
+            ${p.error ? `<span class="badge err" title="${esc(p.error)}">stale</span>` : ''}
+          </div>
+        </div>
+        <div class="hero"><b>${s ? sortFmt(s[state.sort]) : '–'}</b><small>${sortLabel}</small></div>
+      </div>
+      <div class="bar"><i style="width:${max && s ? Math.max(2, (s[state.sort] / max) * 100) : 0}%"></i></div>
+      <div class="tiles">${tiles.map(([k, label, fmt]) =>
+        `<div class="tile"><b>${s ? fmt(s[k]) : '–'}</b><small>${label}</small></div>`).join('')}</div>
+    </article>`).join('');
 }
 
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-Promise.all([
-  fetch('data/stats.json').then((r) => r.json()),
-  fetch('data/history.json').then((r) => r.json()).catch(() => ({})),
-]).then(([data, history]) => {
+fetch('data/stats.json').then((r) => r.json()).then((data) => {
   state.data = data;
-  state.history = history;
   document.getElementById('updated').textContent = data.updatedAt
-    ? 'Last change: ' + new Date(data.updatedAt).toLocaleString()
+    ? 'Last updated: ' + new Date(data.updatedAt).toLocaleString()
     : 'Waiting for the first update run.';
   render();
 }).catch(() => { document.getElementById('updated').textContent = 'Could not load stats.'; });
