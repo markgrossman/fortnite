@@ -17,6 +17,14 @@
    "kills": 29166,
    "deaths": 13487,
    "minutesPlayed": 130732
+  },
+  {
+   "t": "2026-10-04T03:51:24.572Z",
+   "matches": 15054,
+   "wins": 1538,
+   "kills": 29209,
+   "deaths": 13516,
+   "minutesPlayed": 131057
   }
  ],
  "Chopstix_02": [
@@ -27,6 +35,14 @@
    "kills": 32108,
    "deaths": 14461,
    "minutesPlayed": 163515
+  },
+  {
+   "t": "2026-10-04T03:51:22.409Z",
+   "matches": 15998,
+   "wins": 1518,
+   "kills": 32163,
+   "deaths": 14480,
+   "minutesPlayed": 163764
   }
  ]
 }
