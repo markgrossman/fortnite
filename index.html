@@ -47,7 +47,9 @@
   .hero small { font:700 .85rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
   .bar { height:8px; background:var(--track); border-radius:4px; margin:16px 0; overflow:hidden; }
   .bar i { display:block; height:100%; background:var(--fill); border-radius:4px; }
-  .tiles { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
+  .tiles { display:grid; grid-template-columns:repeat(6, 1fr); gap:8px; }
+  .tile { grid-column:span 2; }
+  .tile:nth-child(n+4) { grid-column:span 3; }
   .tile { background:var(--tile); border-radius:16px; padding:10px 4px 8px; text-align:center; }
   .tile b { display:block; font:800 1.55rem/1.05 var(--display); font-variant-numeric:tabular-nums; }
   .tile small { font:700 .8rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
@@ -58,7 +60,8 @@
     .controls { flex-direction:row; flex-wrap:wrap; }
     .controls .seg { flex:1 1 auto; }
     .sortrow { flex:1 0 100%; margin:0; padding:0; }
-    .tiles { grid-template-columns:repeat(6, 1fr); }
+    .tiles { grid-template-columns:repeat(5, 1fr); }
+    .tile, .tile:nth-child(n+4) { grid-column:auto; }
     .player { padding:22px; }
     .head { gap:12px; }
     .rank { width:42px; height:42px; }
@@ -87,7 +90,6 @@ const COLS = [
   ['kd', 'K/D', (v) => v.toFixed(2)],
   ['winRate', 'Win %', (v) => v.toFixed(1) + '%'],
   ['matches', 'Matches', (v) => v],
-  ['hours', 'Hours', (v) => v.toFixed(1)],
   ['level', 'Level', (v) => v ?? '–'],
 ];
 
@@ -96,7 +98,7 @@ const state = { window: 'season', mode: 'overall', sort: 'wins', data: null };
 function rowStats(p) {
   const m = p[state.window]?.[state.mode];
   if (!m) return null;
-  return { ...m, hours: m.minutesPlayed / 60, level: p.level };
+  return { ...m, level: p.level };
 }
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
