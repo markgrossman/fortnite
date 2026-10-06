@@ -55,6 +55,36 @@
   .tile small { font:700 .8rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
   .empty { padding:32px; text-align:center; font-weight:600; }
 
+  .summary { background:var(--white); border-radius:28px; padding:16px 18px; margin-bottom:12px; }
+  .summary h2 { margin:0 0 8px; font:700 .9rem var(--display); text-transform:uppercase; letter-spacing:.06em; }
+  .totals { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; text-align:center; }
+  .totals b { display:block; font:800 2.2rem/.95 var(--display); font-variant-numeric:tabular-nums; }
+  .totals small { font:700 .8rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.6; }
+
+  .awards { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .badge.award { background:var(--fg); color:var(--bg-c); padding:3px 11px; font-size:.72rem; }
+  .more { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:12px; min-height:44px; border:0; border-radius:16px; background:var(--tile); color:inherit; font:700 1rem var(--display); text-transform:uppercase; letter-spacing:.06em; cursor:pointer; }
+  .more i { font-style:normal; display:inline-block; transition:transform .15s; }
+  .open .more i { transform:rotate(180deg); }
+  .detail { display:none; margin-top:12px; }
+  .open .detail { display:block; }
+  .detail h3 { margin:14px 0 8px; font:700 .9rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .detail h3:first-child { margin-top:0; }
+  .mrow { display:grid; grid-template-columns:1.25fr repeat(5, 1fr); align-items:center; gap:2px; padding:7px 10px; border-radius:12px; text-align:center; font:800 1.05rem var(--display); font-variant-numeric:tabular-nums; }
+  .mrow > :first-child { text-align:left; text-transform:uppercase; letter-spacing:.03em; }
+  .mrow.hd { padding-top:0; padding-bottom:0; font:700 .72rem var(--display); text-transform:uppercase; letter-spacing:.05em; opacity:.7; }
+  .mrow.cur { background:var(--fg); color:var(--bg-c); }
+  .mrow + .mrow:not(.hd) { margin-top:4px; background:var(--tile); }
+  .mrow.cur { background:var(--fg) !important; }
+  .trends { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
+  .trend { background:var(--tile); border-radius:16px; padding:10px; }
+  .trend small { display:block; font:700 .75rem var(--display); text-transform:uppercase; letter-spacing:.06em; opacity:.75; }
+  .trend b { display:block; font:800 1.5rem/1.05 var(--display); }
+  .trend svg { display:block; width:100%; height:36px; margin:6px 0 2px; overflow:visible; }
+  .trend svg polyline { fill:none; stroke:var(--fg); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+  .trend em { font:700 .78rem var(--display); font-style:normal; letter-spacing:.04em; opacity:.8; }
+  .note { padding:12px 14px; background:var(--tile); border-radius:12px; font-size:.82rem; }
+
   @media (min-width:560px) {
     h1 { font-size:4.6rem; }
     .controls { flex-direction:row; flex-wrap:wrap; }
@@ -79,10 +109,11 @@
     <div class="seg" id="mode"></div>
     <div class="sortrow" id="sort"></div>
   </div>
+  <div class="summary" id="summary"></div>
   <div class="list" id="list"></div>
 </main>
 <script>
-const WINDOWS = { season: 'Season', lifetime: 'Lifetime' };
+const WINDOWS = { week: 'This week', season: 'Season', lifetime: 'Lifetime' };
 const MODES = { overall: 'Overall', solo: 'Solo', duo: 'Duo', squad: 'Squad' };
 const COLS = [
   ['wins', 'Wins', (v) => v],
@@ -92,28 +123,139 @@ const COLS = [
   ['matches', 'Matches', (v) => v],
   ['level', 'Level', (v) => v ?? '–'],
 ];
+const AWARDS = [['wins', 'Most wins'], ['kills', 'Most kills'], ['kd', 'Best K/D'], ['winRate', 'Top win %'], ['matches', 'Most played']];
+const MAX_AWARDS = 3;
+const DAY = 864e5;
+const TREND_DAYS = 30;
 
-const state = { window: 'season', mode: 'overall', sort: 'wins', data: null };
-
-function rowStats(p) {
-  const m = p[state.window]?.[state.mode];
-  if (!m) return null;
-  return { ...m, level: p.level };
-}
+const state = { window: 'season', mode: 'overall', sort: 'wins', data: null, history: {}, open: new Set() };
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const PLATFORM = { epic: 'Epic', psn: 'PlayStation', xbl: 'Xbox' };
+const signed = (d, digits = 0) => {
+  const r = Number(d.toFixed(digits));
+  return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r).toFixed(digits);
+};
+const fmtFor = (k) => COLS.find(([c]) => c === k)[2];
+
+// ---- stats ------------------------------------------------------------
+
+// History snapshots hold lifetime totals; older ones only have overall.
+const snapMode = (snap, mode) => (mode === 'overall' ? snap : snap.modes?.[mode]);
+
+function weekStats(name, mode) {
+  const snaps = (state.history[name] ?? []).filter((s) => snapMode(s, mode));
+  if (!snaps.length) return null;
+  const cutoff = Date.now() - 7 * DAY;
+  // Baseline = latest snapshot at or before the cutoff, else the earliest we have.
+  const base = [...snaps].reverse().find((s) => Date.parse(s.t) <= cutoff) ?? snaps[0];
+  const cur = snapMode(snaps.at(-1), mode);
+  const b = snapMode(base, mode);
+  const d = (k) => cur[k] - b[k];
+  const matches = d('matches');
+  return {
+    wins: d('wins'), kills: d('kills'), matches,
+    kd: d('deaths') > 0 ? d('kills') / d('deaths') : d('kills'),
+    winRate: matches ? (d('wins') / matches) * 100 : 0,
+    since: Date.parse(base.t),
+  };
+}
+
+function statsFor(p, win = state.window, mode = state.mode) {
+  const m = win === 'week' ? weekStats(p.name, mode) : p[win]?.[mode];
+  return m ? { ...m, level: p.level } : null;
+}
+
+function computeAwards(rows) {
+  const out = new Map(rows.map(({ p }) => [p.name, []]));
+  for (const [k, label] of AWARDS) {
+    // K/D and win % are noisy over a handful of matches.
+    const minMatches = k === 'kd' || k === 'winRate' ? 5 : 1;
+    const elig = rows.filter(({ s }) => s && s.matches >= minMatches);
+    if (elig.length < 2) continue;
+    const best = Math.max(...elig.map(({ s }) => s[k]));
+    if (!(best > 0)) continue;
+    for (const { p, s } of elig) if (s[k] === best) out.get(p.name).push(label);
+  }
+  return out;
+}
+
+// Lifetime overall trend over the last TREND_DAYS, from history snapshots.
+function trendPoints(name) {
+  const snaps = state.history[name] ?? [];
+  const cutoff = Date.now() - TREND_DAYS * DAY;
+  const inRange = snaps.filter((s) => Date.parse(s.t) >= cutoff);
+  const before = snaps.filter((s) => Date.parse(s.t) < cutoff).at(-1);
+  return before ? [before, ...inRange] : inRange;
+}
+
+// minSpan keeps a ratio like K/D from turning noise into a dramatic line.
+function sparkline(vals, times, minSpan = 0) {
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi - lo < minSpan) { const mid = (hi + lo) / 2; lo = mid - minSpan / 2; hi = mid + minSpan / 2; }
+  const t0 = times[0], span = times.at(-1) - t0 || 1;
+  const pts = vals.map((v, i) => {
+    const x = ((times[i] - t0) / span) * 100;
+    const y = hi === lo ? 18 : 34 - ((v - lo) / (hi - lo)) * 32;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  return `<svg viewBox="0 0 100 36" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts.join(' ')}"/></svg>`;
+}
+
+// ---- rendering --------------------------------------------------------
 
 function segment(id, opts, key) {
   const el = document.getElementById(id);
   el.innerHTML = Object.entries(opts).map(([k, label]) =>
-    `<button data-k="${k}" class="${state[key] === k ? 'on' : ''}" >${label}</button>`).join('');
+    `<button data-k="${k}" class="${state[key] === k ? 'on' : ''}">${label}</button>`).join('');
   el.onclick = (e) => {
     const k = e.target.dataset?.k;
     if (!k) return;
     state[key] = k;
     render();
   };
+}
+
+function renderSummary(rows) {
+  const el = document.getElementById('summary');
+  const have = rows.filter(({ s }) => s);
+  el.hidden = !have.length && state.window !== 'week';
+  if (!have.length) {
+    el.innerHTML = `<h2>${MODES[state.mode]} · This week</h2><div class="note">Weekly numbers for this mode start building from the next update and fill in as you play.</div>`;
+    return;
+  }
+  const sum = (k) => have.reduce((n, { s }) => n + s[k], 0);
+  let when = WINDOWS[state.window];
+  if (state.window === 'week') {
+    const since = Math.min(...have.map(({ s }) => s.since));
+    when = since <= Date.now() - 7 * DAY ? 'Last 7 days' : 'Since ' + new Date(since).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+  el.innerHTML = `<h2>Squad total · ${when} · ${MODES[state.mode]}</h2>
+    <div class="totals">${[['wins', 'Wins'], ['kills', 'Kills'], ['matches', 'Matches']].map(([k, label]) =>
+      `<div><b>${sum(k).toLocaleString()}</b><small>${label}</small></div>`).join('')}</div>`;
+}
+
+function modesTable(p) {
+  const head = `<div class="mrow hd"><span></span>${['Wins', 'Kills', 'K/D', 'Win %', 'Games'].map((l) => `<span>${l}</span>`).join('')}</div>`;
+  const body = Object.entries(MODES).map(([m, label]) => {
+    const s = statsFor(p, state.window, m);
+    const cell = (k) => `<span>${s ? fmtFor(k)(s[k]).toString().replace('.0%', '%') : '–'}</span>`;
+    return `<div class="mrow ${m === state.mode ? 'cur' : ''}"><span>${label}</span>${['wins', 'kills', 'kd', 'winRate', 'matches'].map(cell).join('')}</div>`;
+  }).join('');
+  return head + body;
+}
+
+function trends(p) {
+  const pts = trendPoints(p.name);
+  if (pts.length < 2) return '<div class="note">Trends show up once there are a few more matches on record.</div>';
+  const times = pts.map((s) => Date.parse(s.t));
+  const series = [
+    ['Wins', pts.map((s) => s.wins), (v) => v.toLocaleString(), (d) => signed(d), 0],
+    ['Kills', pts.map((s) => s.kills), (v) => v.toLocaleString(), (d) => signed(d), 0],
+    ['K/D', pts.map((s) => (s.deaths ? s.kills / s.deaths : s.kills)), (v) => v.toFixed(2), (d) => signed(d, 2), 0.3],
+  ];
+  return `<div class="trends">${series.map(([label, vals, fmt, fmtD, minSpan]) => `
+    <div class="trend"><small>${label}</small><b>${fmt(vals.at(-1))}</b>${sparkline(vals, times, minSpan)}<em>${fmtD(vals.at(-1) - vals[0])}</em></div>`).join('')}</div>`;
 }
 
 function render() {
@@ -126,18 +268,25 @@ function render() {
   sort.onclick = (e) => { if (e.target.dataset?.k) { state.sort = e.target.dataset.k; render(); } };
 
   const rows = state.data.players
-    .map((p) => ({ p, s: rowStats(p) }))
+    .map((p) => ({ p, s: statsFor(p) }))
     .sort((a, b) => (b.s?.[state.sort] ?? -1) - (a.s?.[state.sort] ?? -1));
 
+  renderSummary(rows);
   const list = document.getElementById('list');
   if (!rows.length) { list.innerHTML = '<div class="empty">No players yet. Add some to players.json.</div>'; return; }
 
   const [, sortLabel, sortFmt] = COLS.find(([k]) => k === state.sort);
   const max = Math.max(...rows.map(({ s }) => s?.[state.sort] ?? 0), 0);
   const tiles = COLS.filter(([k]) => k !== state.sort);
+  const awards = computeAwards(rows);
 
-  list.innerHTML = rows.map(({ p, s }, i) => `
-    <article class="player r${Math.min(i + 1, 4)}">
+  list.innerHTML = rows.map(({ p, s }, i) => {
+    const mine = awards.get(p.name);
+    const shown = mine.slice(0, MAX_AWARDS);
+    const extra = mine.slice(MAX_AWARDS);
+    const open = state.open.has(p.name);
+    return `
+    <article class="player r${Math.min(i + 1, 4)} ${open ? 'open' : ''}" data-name="${esc(p.name)}">
       <div class="head">
         <div class="rank">${i + 1}</div>
         <div class="who">
@@ -149,14 +298,37 @@ function render() {
         </div>
         <div class="hero"><b>${s ? sortFmt(s[state.sort]) : '–'}</b><small>${sortLabel}</small></div>
       </div>
+      ${mine.length ? `<div class="awards">${shown.map((a) => `<span class="badge award">★ ${a}</span>`).join('')}${extra.length ? `<span class="badge award" title="${esc(extra.join(', '))}">+${extra.length}</span>` : ''}</div>` : ''}
       <div class="bar"><i style="width:${max && s ? Math.max(2, (s[state.sort] / max) * 100) : 0}%"></i></div>
       <div class="tiles">${tiles.map(([k, label, fmt]) =>
         `<div class="tile"><b>${s ? fmt(s[k]) : '–'}</b><small>${label}</small></div>`).join('')}</div>
-    </article>`).join('');
+      <button class="more" aria-expanded="${open}">Details <i>▾</i></button>
+      <div class="detail">
+        <h3>By mode · ${WINDOWS[state.window]}</h3>
+        ${modesTable(p)}
+        <h3>Last ${TREND_DAYS} days · lifetime</h3>
+        ${trends(p)}
+      </div>
+    </article>`;
+  }).join('');
 }
 
-fetch('data/stats.json').then((r) => r.json()).then((data) => {
+// Toggle details in place so the page doesn't re-render (and jump).
+document.getElementById('list').addEventListener('click', (e) => {
+  const btn = e.target.closest('.more');
+  if (!btn) return;
+  const card = btn.closest('.player');
+  const open = card.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+  state.open[open ? 'add' : 'delete'](card.dataset.name);
+});
+
+Promise.all([
+  fetch('data/stats.json').then((r) => r.json()),
+  fetch('data/history.json').then((r) => r.json()).catch(() => ({})),
+]).then(([data, history]) => {
   state.data = data;
+  state.history = history;
   document.getElementById('updated').textContent = data.updatedAt
     ? 'Last updated: ' + new Date(data.updatedAt).toLocaleString()
     : 'Waiting for the first update run.';

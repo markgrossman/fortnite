@@ -75,11 +75,13 @@ for (const player of players) {
     };
     out.push(entry);
 
-    // History: append a snapshot only when the player has played new matches.
+    // History: append a snapshot when the player has played new matches (or
+    // when the last snapshot predates per-mode tracking).
     const o = entry.lifetime.overall;
     const snaps = (history[entry.name] ??= []);
     const last = snaps.at(-1);
-    if (o && (!last || last.matches !== o.matches)) {
+    if (o && (!last || last.matches !== o.matches || !last.modes)) {
+      const slim = (m) => m && { matches: m.matches, wins: m.wins, kills: m.kills, deaths: m.deaths };
       snaps.push({
         t: new Date().toISOString(),
         matches: o.matches,
@@ -87,6 +89,11 @@ for (const player of players) {
         kills: o.kills,
         deaths: o.deaths,
         minutesPlayed: o.minutesPlayed,
+        modes: {
+          solo: slim(entry.lifetime.solo),
+          duo: slim(entry.lifetime.duo),
+          squad: slim(entry.lifetime.squad),
+        },
       });
     }
   } catch (err) {
