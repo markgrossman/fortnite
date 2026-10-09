@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-08T20:43:38.676Z",
+  "updatedAt": "2026-10-09T00:44:58.802Z",
   "players": [
     {
       "name": "Quietkoala5",
@@ -97,13 +97,13 @@
       "lifetime": {
         "overall": {
           "wins": 1523,
-          "kills": 32243,
-          "deaths": 14508,
-          "matches": 16031,
+          "kills": 32247,
+          "deaths": 14510,
+          "matches": 16033,
           "kd": 2.222,
-          "winRate": 9.5,
-          "minutesPlayed": 164152,
-          "score": 3793689
+          "winRate": 9.499,
+          "minutesPlayed": 164173,
+          "score": 3794133
         },
         "solo": {
           "wins": 15,
@@ -127,25 +127,25 @@
         },
         "squad": {
           "wins": 1131,
-          "kills": 17002,
-          "deaths": 7623,
-          "matches": 8754,
+          "kills": 17006,
+          "deaths": 7625,
+          "matches": 8756,
           "kd": 2.23,
-          "winRate": 12.92,
-          "minutesPlayed": 85233,
-          "score": 2189054
+          "winRate": 12.917,
+          "minutesPlayed": 85254,
+          "score": 2189498
         }
       },
       "season": {
         "overall": {
           "wins": 43,
-          "kills": 936,
-          "deaths": 265,
-          "matches": 308,
-          "kd": 3.532,
-          "winRate": 13.961,
-          "minutesPlayed": 3848,
-          "score": 112188
+          "kills": 940,
+          "deaths": 267,
+          "matches": 310,
+          "kd": 3.521,
+          "winRate": 13.871,
+          "minutesPlayed": 3869,
+          "score": 112632
         },
         "solo": {
           "wins": 2,
@@ -169,102 +169,102 @@
         },
         "squad": {
           "wins": 32,
-          "kills": 548,
-          "deaths": 106,
-          "matches": 138,
-          "kd": 5.17,
-          "winRate": 23.188,
-          "minutesPlayed": 1844,
-          "score": 55856
+          "kills": 552,
+          "deaths": 108,
+          "matches": 140,
+          "kd": 5.111,
+          "winRate": 22.857,
+          "minutesPlayed": 1865,
+          "score": 56300
         }
       }
     },
     {
       "name": "Kaiser2007",
       "accountType": "epic",
-      "level": 276,
+      "level": 284,
       "lifetime": {
         "overall": {
-          "wins": 1545,
-          "kills": 29292,
-          "deaths": 13546,
-          "matches": 15091,
-          "kd": 2.162,
-          "winRate": 10.238,
-          "minutesPlayed": 131535,
-          "score": 3388464
+          "wins": 1547,
+          "kills": 29314,
+          "deaths": 13555,
+          "matches": 15102,
+          "kd": 2.163,
+          "winRate": 10.244,
+          "minutesPlayed": 131687,
+          "score": 3392872
         },
         "solo": {
-          "wins": 34,
-          "kills": 1656,
-          "deaths": 1207,
-          "matches": 1241,
-          "kd": 1.372,
-          "winRate": 2.74,
-          "minutesPlayed": 7687,
-          "score": 198167
+          "wins": 35,
+          "kills": 1666,
+          "deaths": 1211,
+          "matches": 1246,
+          "kd": 1.376,
+          "winRate": 2.809,
+          "minutesPlayed": 7758,
+          "score": 200315
         },
         "duo": {
-          "wins": 217,
-          "kills": 6217,
-          "deaths": 4032,
-          "matches": 4249,
-          "kd": 1.542,
-          "winRate": 5.107,
-          "minutesPlayed": 35407,
-          "score": 851753
+          "wins": 218,
+          "kills": 6229,
+          "deaths": 4035,
+          "matches": 4253,
+          "kd": 1.544,
+          "winRate": 5.126,
+          "minutesPlayed": 35465,
+          "score": 853647
         },
         "squad": {
           "wins": 1026,
           "kills": 17389,
-          "deaths": 7090,
-          "matches": 8116,
-          "kd": 2.453,
-          "winRate": 12.642,
-          "minutesPlayed": 77012,
-          "score": 1979011
+          "deaths": 7092,
+          "matches": 8118,
+          "kd": 2.452,
+          "winRate": 12.639,
+          "minutesPlayed": 77035,
+          "score": 1979377
         }
       },
       "season": {
         "overall": {
-          "wins": 60,
-          "kills": 1012,
-          "deaths": 362,
-          "matches": 422,
-          "kd": 2.796,
-          "winRate": 14.218,
-          "minutesPlayed": 5040,
-          "score": 145306
+          "wins": 61,
+          "kills": 1030,
+          "deaths": 371,
+          "matches": 432,
+          "kd": 2.776,
+          "winRate": 14.12,
+          "minutesPlayed": 5175,
+          "score": 149049
         },
         "solo": {
           "wins": 10,
-          "kills": 200,
-          "deaths": 100,
-          "matches": 110,
-          "kd": 2,
-          "winRate": 9.091,
-          "minutesPlayed": 1251,
-          "score": 35541
+          "kills": 206,
+          "deaths": 104,
+          "matches": 114,
+          "kd": 1.981,
+          "winRate": 8.772,
+          "minutesPlayed": 1305,
+          "score": 37024
         },
         "duo": {
-          "wins": 18,
-          "kills": 268,
-          "deaths": 99,
-          "matches": 117,
-          "kd": 2.707,
-          "winRate": 15.385,
-          "minutesPlayed": 1353,
-          "score": 40056
+          "wins": 19,
+          "kills": 280,
+          "deaths": 102,
+          "matches": 121,
+          "kd": 2.745,
+          "winRate": 15.702,
+          "minutesPlayed": 1411,
+          "score": 41950
         },
         "squad": {
           "wins": 32,
           "kills": 544,
-          "deaths": 161,
-          "matches": 193,
-          "kd": 3.379,
-          "winRate": 16.58,
-          "minutesPlayed": 2399,
-          "score": 69199
+          "deaths": 163,
+          "matches": 195,
+          "kd": 3.337,
+          "winRate": 16.41,
+          "minutesPlayed": 2422,
+          "score": 69565
         }
       }
     }
