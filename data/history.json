@@ -171,6 +171,34 @@
      "deaths": 264
     }
    }
+  },
+  {
+   "t": "2026-10-10T22:15:01.804Z",
+   "matches": 1053,
+   "wins": 286,
+   "kills": 3497,
+   "deaths": 767,
+   "minutesPlayed": 11974,
+   "modes": {
+    "solo": {
+     "matches": 322,
+     "wins": 43,
+     "kills": 1618,
+     "deaths": 279
+    },
+    "duo": {
+     "matches": 201,
+     "wins": 51,
+     "kills": 458,
+     "deaths": 150
+    },
+    "squad": {
+     "matches": 401,
+     "wins": 135,
+     "kills": 779,
+     "deaths": 266
+    }
+   }
   }
  ],
  "Kaiser2007": [
@@ -467,6 +495,34 @@
      "wins": 1028,
      "kills": 17424,
      "deaths": 7098
+    }
+   }
+  },
+  {
+   "t": "2026-10-10T22:15:06.232Z",
+   "matches": 15131,
+   "wins": 1551,
+   "kills": 29382,
+   "deaths": 13580,
+   "minutesPlayed": 131993,
+   "modes": {
+    "solo": {
+     "matches": 1249,
+     "wins": 35,
+     "kills": 1671,
+     "deaths": 1214
+    },
+    "duo": {
+     "matches": 4264,
+     "wins": 219,
+     "kills": 6239,
+     "deaths": 4045
+    },
+    "squad": {
+     "matches": 8133,
+     "wins": 1029,
+     "kills": 17442,
+     "deaths": 7104
     }
    }
   }
