@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-10T08:46:13.528Z",
+  "updatedAt": "2026-10-10T18:59:54.462Z",
   "players": [
     {
       "name": "Quietkoala5",
@@ -187,12 +187,12 @@
         "overall": {
           "wins": 1549,
           "kills": 29354,
-          "deaths": 13566,
-          "matches": 15115,
-          "kd": 2.164,
-          "winRate": 10.248,
-          "minutesPlayed": 131842,
-          "score": 3397357
+          "deaths": 13568,
+          "matches": 15117,
+          "kd": 2.163,
+          "winRate": 10.247,
+          "minutesPlayed": 131861,
+          "score": 3397777
         },
         "solo": {
           "wins": 35,
@@ -207,12 +207,12 @@
         "duo": {
           "wins": 218,
           "kills": 6229,
-          "deaths": 4037,
-          "matches": 4255,
-          "kd": 1.543,
-          "winRate": 5.123,
-          "minutesPlayed": 35485,
-          "score": 854063
+          "deaths": 4039,
+          "matches": 4257,
+          "kd": 1.542,
+          "winRate": 5.121,
+          "minutesPlayed": 35504,
+          "score": 854483
         },
         "squad": {
           "wins": 1028,
@@ -229,12 +229,12 @@
         "overall": {
           "wins": 63,
           "kills": 1070,
-          "deaths": 382,
-          "matches": 445,
-          "kd": 2.801,
-          "winRate": 14.157,
-          "minutesPlayed": 5330,
-          "score": 153534
+          "deaths": 384,
+          "matches": 447,
+          "kd": 2.786,
+          "winRate": 14.094,
+          "minutesPlayed": 5349,
+          "score": 153954
         },
         "solo": {
           "wins": 10,
@@ -249,12 +249,12 @@
         "duo": {
           "wins": 19,
           "kills": 280,
-          "deaths": 104,
-          "matches": 123,
-          "kd": 2.692,
-          "winRate": 15.447,
-          "minutesPlayed": 1431,
-          "score": 42366
+          "deaths": 106,
+          "matches": 125,
+          "kd": 2.642,
+          "winRate": 15.2,
+          "minutesPlayed": 1450,
+          "score": 42786
         },
         "squad": {
           "wins": 34,
