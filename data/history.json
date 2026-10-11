@@ -609,6 +609,34 @@
      "deaths": 7104
     }
    }
+  },
+  {
+   "t": "2026-10-11T22:59:50.739Z",
+   "matches": 15152,
+   "wins": 1552,
+   "kills": 29408,
+   "deaths": 13600,
+   "minutesPlayed": 132264,
+   "modes": {
+    "solo": {
+     "matches": 1252,
+     "wins": 35,
+     "kills": 1674,
+     "deaths": 1217
+    },
+    "duo": {
+     "matches": 4279,
+     "wins": 219,
+     "kills": 6254,
+     "deaths": 4060
+    },
+    "squad": {
+     "matches": 8136,
+     "wins": 1030,
+     "kills": 17450,
+     "deaths": 7106
+    }
+   }
   }
  ],
  "Chopstix_02": [
@@ -1031,6 +1059,34 @@
      "wins": 214,
      "kills": 5896,
      "deaths": 4158
+    },
+    "squad": {
+     "matches": 8766,
+     "wins": 1134,
+     "kills": 17059,
+     "deaths": 7632
+    }
+   }
+  },
+  {
+   "t": "2026-10-11T22:59:48.599Z",
+   "matches": 16071,
+   "wins": 1526,
+   "kills": 32344,
+   "deaths": 14545,
+   "minutesPlayed": 164626,
+   "modes": {
+    "solo": {
+     "matches": 888,
+     "wins": 15,
+     "kills": 897,
+     "deaths": 873
+    },
+    "duo": {
+     "matches": 4376,
+     "wins": 214,
+     "kills": 5901,
+     "deaths": 4162
     },
     "squad": {
      "matches": 8766,
