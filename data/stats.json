@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-10T22:15:06.232Z",
+  "updatedAt": "2026-10-11T01:05:02.777Z",
   "players": [
     {
       "name": "Quietkoala5",
@@ -97,23 +97,23 @@
       "lifetime": {
         "overall": {
           "wins": 1526,
-          "kills": 32311,
-          "deaths": 14522,
-          "matches": 16048,
+          "kills": 32322,
+          "deaths": 14527,
+          "matches": 16053,
           "kd": 2.225,
-          "winRate": 9.509,
-          "minutesPlayed": 164354,
-          "score": 3799847
+          "winRate": 9.506,
+          "minutesPlayed": 164391,
+          "score": 3800926
         },
         "solo": {
           "wins": 15,
-          "kills": 881,
-          "deaths": 865,
-          "matches": 880,
-          "kd": 1.018,
-          "winRate": 1.705,
-          "minutesPlayed": 4743,
-          "score": 123236
+          "kills": 892,
+          "deaths": 870,
+          "matches": 885,
+          "kd": 1.025,
+          "winRate": 1.695,
+          "minutesPlayed": 4780,
+          "score": 124315
         },
         "duo": {
           "wins": 214,
@@ -139,23 +139,23 @@
       "season": {
         "overall": {
           "wins": 46,
-          "kills": 1004,
-          "deaths": 279,
-          "matches": 325,
-          "kd": 3.599,
-          "winRate": 14.154,
-          "minutesPlayed": 4050,
-          "score": 118346
+          "kills": 1015,
+          "deaths": 284,
+          "matches": 330,
+          "kd": 3.574,
+          "winRate": 13.939,
+          "minutesPlayed": 4087,
+          "score": 119425
         },
         "solo": {
           "wins": 2,
-          "kills": 100,
-          "deaths": 74,
-          "matches": 76,
-          "kd": 1.351,
-          "winRate": 2.632,
-          "minutesPlayed": 904,
-          "score": 24754
+          "kills": 111,
+          "deaths": 79,
+          "matches": 81,
+          "kd": 1.405,
+          "winRate": 2.469,
+          "minutesPlayed": 941,
+          "score": 25833
         },
         "duo": {
           "wins": 9,
