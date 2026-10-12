@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T22:59:50.739Z",
+  "updatedAt": "2026-10-12T09:28:19.767Z",
   "players": [
     {
       "name": "Quietkoala5",
@@ -93,17 +93,17 @@
     {
       "name": "Chopstix_02",
       "accountType": "psn",
-      "level": 274,
+      "level": 276,
       "lifetime": {
         "overall": {
           "wins": 1526,
           "kills": 32344,
-          "deaths": 14545,
-          "matches": 16071,
+          "deaths": 14546,
+          "matches": 16072,
           "kd": 2.224,
           "winRate": 9.495,
-          "minutesPlayed": 164626,
-          "score": 3806652
+          "minutesPlayed": 164644,
+          "score": 3806907
         },
         "solo": {
           "wins": 15,
@@ -140,12 +140,12 @@
         "overall": {
           "wins": 46,
           "kills": 1037,
-          "deaths": 302,
-          "matches": 348,
-          "kd": 3.434,
-          "winRate": 13.218,
-          "minutesPlayed": 4322,
-          "score": 125151
+          "deaths": 303,
+          "matches": 349,
+          "kd": 3.422,
+          "winRate": 13.181,
+          "minutesPlayed": 4340,
+          "score": 125406
         },
         "solo": {
           "wins": 2,

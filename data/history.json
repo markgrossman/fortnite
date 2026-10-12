@@ -1095,6 +1095,34 @@
      "deaths": 7632
     }
    }
+  },
+  {
+   "t": "2026-10-12T09:28:17.789Z",
+   "matches": 16072,
+   "wins": 1526,
+   "kills": 32344,
+   "deaths": 14546,
+   "minutesPlayed": 164644,
+   "modes": {
+    "solo": {
+     "matches": 888,
+     "wins": 15,
+     "kills": 897,
+     "deaths": 873
+    },
+    "duo": {
+     "matches": 4376,
+     "wins": 214,
+     "kills": 5901,
+     "deaths": 4162
+    },
+    "squad": {
+     "matches": 8766,
+     "wins": 1134,
+     "kills": 17059,
+     "deaths": 7632
+    }
+   }
   }
  ]
 }
