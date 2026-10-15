@@ -1488,5 +1488,65 @@
     }
    }
   }
+ ],
+ "SirChawlz": [
+  {
+   "t": "2026-10-15T03:26:06.249Z",
+   "matches": 774,
+   "wins": 112,
+   "kills": 1979,
+   "deaths": 662,
+   "minutesPlayed": 9305,
+   "modes": {
+    "solo": {
+     "matches": 28,
+     "wins": 1,
+     "kills": 78,
+     "deaths": 27
+    },
+    "duo": {
+     "matches": 187,
+     "wins": 15,
+     "kills": 502,
+     "deaths": 172
+    },
+    "squad": {
+     "matches": 488,
+     "wins": 89,
+     "kills": 1285,
+     "deaths": 399
+    }
+   }
+  }
+ ],
+ "CoolStoryDawg": [
+  {
+   "t": "2026-10-15T03:26:09.229Z",
+   "matches": 7539,
+   "wins": 488,
+   "kills": 9535,
+   "deaths": 7051,
+   "minutesPlayed": 43003,
+   "modes": {
+    "solo": {
+     "matches": 1290,
+     "wins": 23,
+     "kills": 1750,
+     "deaths": 1267
+    },
+    "duo": {
+     "matches": 1806,
+     "wins": 85,
+     "kills": 2397,
+     "deaths": 1721
+    },
+    "squad": {
+     "matches": 3913,
+     "wins": 303,
+     "kills": 4419,
+     "deaths": 3610
+    }
+   }
+  }
  ]
 }
