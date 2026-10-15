@@ -10,7 +10,7 @@
 <style>
   :root {
     --bg:#b8cfc3; --ink:#161616; --white:#fff;
-    --coral:#f6806a; --yellow:#f7c948; --purple:#7470f4;
+    --coral:#f6806a; --yellow:#f7c948; --purple:#7470f4; --sky:#5fc9e8; --pink:#f58fc2;
     --display:'Barlow Condensed','Arial Narrow',Impact,sans-serif;
   }
   * { box-sizing: border-box; }
@@ -35,6 +35,8 @@
   .player.r1 { --bg-c:var(--coral); --fg:var(--ink); --tile:rgba(255,255,255,.35); --track:rgba(0,0,0,.14); --fill:var(--ink); --badge:rgba(255,255,255,.4); }
   .player.r2 { --bg-c:var(--yellow); --fg:var(--ink); --tile:rgba(255,255,255,.4); --track:rgba(0,0,0,.14); --fill:var(--ink); --badge:rgba(255,255,255,.45); }
   .player.r3 { --bg-c:var(--purple); --fg:var(--white); --tile:rgba(255,255,255,.18); --track:rgba(255,255,255,.25); --fill:var(--white); --badge:rgba(255,255,255,.2); }
+  .player.r4 { --bg-c:var(--sky); --fg:var(--ink); --tile:rgba(255,255,255,.4); --track:rgba(0,0,0,.14); --fill:var(--ink); --badge:rgba(255,255,255,.45); }
+  .player.r5 { --bg-c:var(--pink); --fg:var(--ink); --tile:rgba(255,255,255,.4); --track:rgba(0,0,0,.14); --fill:var(--ink); --badge:rgba(255,255,255,.45); }
   .head { display:flex; align-items:center; gap:10px; }
   .rank { flex:none; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; font:800 1.4rem var(--display); background:var(--fg); color:var(--bg-c); }
   .who { flex:1; min-width:0; }
@@ -286,7 +288,7 @@ function render() {
     const extra = mine.slice(MAX_AWARDS);
     const open = state.open.has(p.name);
     return `
-    <article class="player r${Math.min(i + 1, 4)} ${open ? 'open' : ''}" data-name="${esc(p.name)}">
+    <article class="player r${i < 3 ? i + 1 : 4 + (i - 3) % 2} ${open ? 'open' : ''}" data-name="${esc(p.name)}">
       <div class="head">
         <div class="rank">${i + 1}</div>
         <div class="who">
