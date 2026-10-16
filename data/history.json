@@ -255,6 +255,34 @@
      "deaths": 268
     }
    }
+  },
+  {
+   "t": "2026-10-16T05:13:11.063Z",
+   "matches": 1060,
+   "wins": 288,
+   "kills": 3513,
+   "deaths": 772,
+   "minutesPlayed": 12092,
+   "modes": {
+    "solo": {
+     "matches": 323,
+     "wins": 43,
+     "kills": 1624,
+     "deaths": 280
+    },
+    "duo": {
+     "matches": 203,
+     "wins": 51,
+     "kills": 463,
+     "deaths": 152
+    },
+    "squad": {
+     "matches": 405,
+     "wins": 137,
+     "kills": 784,
+     "deaths": 268
+    }
+   }
   }
  ],
  "Kaiser2007": [
@@ -945,6 +973,34 @@
      "deaths": 7116
     }
    }
+  },
+  {
+   "t": "2026-10-16T05:13:16.021Z",
+   "matches": 15195,
+   "wins": 1558,
+   "kills": 29531,
+   "deaths": 13637,
+   "minutesPlayed": 132859,
+   "modes": {
+    "solo": {
+     "matches": 1261,
+     "wins": 35,
+     "kills": 1691,
+     "deaths": 1226
+    },
+    "duo": {
+     "matches": 4295,
+     "wins": 220,
+     "kills": 6296,
+     "deaths": 4075
+    },
+    "squad": {
+     "matches": 8153,
+     "wins": 1034,
+     "kills": 17513,
+     "deaths": 7119
+    }
+   }
   }
  ],
  "Chopstix_02": [
@@ -1599,6 +1655,34 @@
      "deaths": 7640
     }
    }
+  },
+  {
+   "t": "2026-10-16T05:13:13.694Z",
+   "matches": 16096,
+   "wins": 1531,
+   "kills": 32427,
+   "deaths": 14565,
+   "minutesPlayed": 164987,
+   "modes": {
+    "solo": {
+     "matches": 890,
+     "wins": 16,
+     "kills": 905,
+     "deaths": 874
+    },
+    "duo": {
+     "matches": 4380,
+     "wins": 214,
+     "kills": 5922,
+     "deaths": 4166
+    },
+    "squad": {
+     "matches": 8782,
+     "wins": 1138,
+     "kills": 17113,
+     "deaths": 7644
+    }
+   }
   }
  ],
  "SirChawlz": [
@@ -1685,6 +1769,34 @@
      "wins": 303,
      "kills": 4427,
      "deaths": 3614
+    }
+   }
+  },
+  {
+   "t": "2026-10-16T05:13:20.113Z",
+   "matches": 7549,
+   "wins": 488,
+   "kills": 9547,
+   "deaths": 7061,
+   "minutesPlayed": 43122,
+   "modes": {
+    "solo": {
+     "matches": 1290,
+     "wins": 23,
+     "kills": 1750,
+     "deaths": 1267
+    },
+    "duo": {
+     "matches": 1809,
+     "wins": 85,
+     "kills": 2398,
+     "deaths": 1724
+    },
+    "squad": {
+     "matches": 3920,
+     "wins": 303,
+     "kills": 4430,
+     "deaths": 3617
     }
    }
   }
